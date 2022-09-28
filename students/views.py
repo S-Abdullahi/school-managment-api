@@ -11,16 +11,6 @@ from rest_framework import status
 class StudentViewset(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
-    @action(detail=True, methods=['POST'])
-    def register_student(self,request,serializer):
-        student = self.serializer_class(data=request.data)
-        try:
-            if student.is_valid():
-                student.save()
-                return Response({'message': 'student successfully created'}, status=status.HTTP_201_CREATED)
-        except:
-            return Response({'message': 'student registration failed'}, status=status.HTTP_400_BAD_REQUEST)
         
     @action(detail=False, methods=['GET'])
     def student_summary(self,request,pk=None, **kwargs):
@@ -46,7 +36,6 @@ class StudentViewset(viewsets.ModelViewSet):
                          }, status=status.HTTP_200_OK)
         
         
-
 class ParentViewset(viewsets.ModelViewSet):
     queryset = Parent.objects.all()
     serializer_class = ParentSerializer
