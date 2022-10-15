@@ -1,17 +1,17 @@
 from xml.dom import ValidationErr
 from rest_framework import serializers
-from .models import Parent, Student
+from .models import Parent, Student, PrimaryStudent, SecondaryStudent, School
+import datetime
 
 
-
-class StudentSerializer(serializers.ModelSerializer):
+# class StudentSerializer(serializers.ModelSerializer):
     
-    class Meta:
-        model = Student
-        fields = '__all__'
+#     class Meta:
+#         model = Student
+#         fields = '__all__'
         
-    def validate(self, attrs):
-        return super().validate(attrs)
+#     def validate(self, attrs):
+#         return super().validate(attrs)
         
 class ParentSerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
@@ -19,7 +19,7 @@ class ParentSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     occupation = serializers.CharField()
-    parent_phone = serializers.IntegerField()
+    parent_phone = serializers.CharField()
     email = serializers.EmailField()
     
     def validate_parent_phone(self, value):
@@ -38,3 +38,33 @@ class ParentSerializer(serializers.Serializer):
     
     def create(self, validated_data):
         return Parent.objects.create(**validated_data)
+    
+
+class PrimaryStudentSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PrimaryStudent
+        fields = '__all__'
+        
+    # def validate(self, data):
+    #     dob = data['birthday']
+    #     level = data['level']
+    #     print(dob, 'rrr')
+    #     year = datetime.datetime.date()
+    #     print(year, 'yyyy')
+    #     if year < 5 and level == 'PRIMARY':
+    #         raise serializers.ValidationError('student age is not eligible for this class')
+    #     return super().validate(data)
+        
+class SecondaryStudentSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SecondaryStudent
+        fields = '__all__'
+        
+class SchoolSerializer(serializers.ModelSerializer):
+     
+    class Meta:
+        model = School
+        fields = '__all__'
+
