@@ -3,7 +3,7 @@ from multiprocessing import context
 from django.http import QueryDict
 from django.shortcuts import render
 from uritemplate import partial
-from .serializer import ParentSerializer, PrimaryStudentSerializer, SecondaryStudentSerializer, SchoolSerializer
+from .serializer import  PrimaryStudentSerializer, SecondaryStudentSerializer, SchoolSerializer
 from .models import Student, Parent, PrimaryStudent, SecondaryStudent, School
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -50,21 +50,15 @@ class PrimaryStudentViewset(viewsets.ModelViewSet):
         qs_creche = PrimaryStudent.objects.filter(level='CRECHE')
         qs_nursery = PrimaryStudent.objects.filter(level='NURSERY')
         qs_primary = PrimaryStudent.objects.filter(level='PRIMARY')
-        # qs_junior_secondary = PrimaryStudent.objects.filter(level='JUNIOR SECONDARY')
-        # qs_senior_secondary = PrimaryStudent.objects.filter(level="SENIOR SECONDARY")
         total_students = qs.count()
         total_creche = qs_creche.count()
         total_nursery = qs_nursery.count()
         total_primary = qs_primary.count()
-        # total_junior_secondary = qs_junior_secondary.count()
-        # total_senior_secondary = qs_senior_secondary.count()
         
         return Response({'total_students': total_students,
                          'total_creche': total_creche,
                          'total_nursery': total_nursery,
                          'total_primary': total_primary
-                        #  'total_junior_secondary': total_junior_secondary,
-                        #  'total_senior_secondary': total_senior_secondary
                          }, status=status.HTTP_200_OK)
         
     @action(detail=False, methods=['GET'])
@@ -94,51 +88,51 @@ class SecondaryStudentViewset(viewsets.ModelViewSet):
             status = status.HTTP_200_OK
         )
         
-class ParentViewset(viewsets.ModelViewSet):
-    queryset = Parent.objects.all()
-    serializer_class = ParentSerializer
+# class ParentViewset(viewsets.ModelViewSet):
+#     queryset = Parent.objects.all()
+#     serializer_class = ParentsSerializer
     
-    def create(self,request):
-        try:
-            serializer = ParentSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"data":serializer.data, "status": "parent created successfully"},  status = status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors)
-        except Exception as e:
-            return Response({'message': str(e)})
+#     def create(self,request):
+#         try:
+#             serializer = ParentsSerializer(data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response({"data":serializer.data, "status": "parent created successfully"},  status = status.HTTP_201_CREATED)
+#             else:
+#                 return Response(serializer.errors)
+#         except Exception as e:
+#             return Response({'message': str(e)})
     
-    def partial_update(self, request,pk):
-        try:
-            parent_data = self.get_queryset().filter(pk=pk).first()
-            if not parent_data:
-                return Response(
-                    {'success': False, 'message': 'Parent data does not exist'},
-                    status = status.HTTP_400_BAD_REQUEST,
-                )
-            serializer = ParentSerializer(instance=parent_data, data=request.data, context={'request':request}, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'success': True,
-                                 'message':'parent updated successfully',
-                                 'data': serializer.data},
-                                status = status.HTTP_200_OK)
-            return Response(
-                {'sucess': False, 'message': serializer.errors}
-            )
-        except Exception as e:
-            return Response({'message': str(e)})
+#     def partial_update(self, request,pk):
+#         try:
+#             parent_data = self.get_queryset().filter(pk=pk).first()
+#             if not parent_data:
+#                 return Response(
+#                     {'success': False, 'message': 'Parent data does not exist'},
+#                     status = status.HTTP_400_BAD_REQUEST,
+#                 )
+#             serializer = ParentSerializer(instance=parent_data, data=request.data, context={'request':request}, partial=True)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response({'success': True,
+#                                  'message':'parent updated successfully',
+#                                  'data': serializer.data},
+#                                 status = status.HTTP_200_OK)
+#             return Response(
+#                 {'sucess': False, 'message': serializer.errors}
+#             )
+#         except Exception as e:
+#             return Response({'message': str(e)})
             
       
         
     
-    @action(detail=False, methods=['GET'])
-    def parent_summary(self, request, pk=None, **kwargs):
-        qs = Parent.objects.all()
-        total_parent = qs.count()
-        return Response({'success':True, 
-                         'Total parent': total_parent}, status=status.HTTP_200_OK)
+#     @action(detail=False, methods=['GET'])
+#     def parent_summary(self, request, pk=None, **kwargs):
+#         qs = Parent.objects.all()
+#         total_parent = qs.count()
+#         return Response({'success':True, 
+#                          'Total parent': total_parent}, status=status.HTTP_200_OK)
         
 
         

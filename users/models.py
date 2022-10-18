@@ -7,8 +7,6 @@ from .managers import CustomUserManager
 import uuid 
 # Create your models here.  
   
-  
-  
 class User(AbstractBaseUser, PermissionsMixin):  
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email_address'), unique=True, max_length = 200)
